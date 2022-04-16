@@ -1,0 +1,15 @@
+<media width="320" height="240">
+    <par>
+        <image src="tests/files/background.png"/>
+        <crop x0="0" y0="0">
+            <media width="320" height="100">
+                <speak>テスト文章です。</speak>
+            </media>
+        </crop>
+        <margin top="100" before="1s">
+            <media width="320" height="100">
+                <speak>複数の文章を出力します。</speak>
+            </media>
+        </margin>
+    </par>
+</media>
