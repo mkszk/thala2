@@ -98,7 +98,7 @@ class MovieBB(BoundingBox):
         if ret:
             return frame
         else:
-            return super().image()
+            return super().image(t)
 
 
 class TextBB(BoundingBox):

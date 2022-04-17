@@ -53,8 +53,8 @@ def parse_time(query):
 
 def parse_gain(query):
     if mat := GAIN.match(query):
-        return 10**(_decode_num(
-            mat.group(1), mat.group(2), mat.group(3)) / 10)
+        return _decode_num(
+            mat.group(1), mat.group(2), mat.group(3))
     else:
         assert False
 
@@ -64,4 +64,4 @@ assert parse_time("+1s") == 1
 assert parse_time("-10min") == -10 * 60
 assert parse_time("1h") == 1 * 60 * 60
 assert parse_gain("10dB") == 10
-assert parse_gain("-10dB") == 0.1
+assert parse_gain("-10dB") == -10

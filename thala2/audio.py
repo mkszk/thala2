@@ -21,12 +21,15 @@ class Audio:
         if tts:
             self.__tts = tts
         else:
-            res = requests.get("http://localhost:50021/docs")
-            if res.status_code == 200 and regex.search(
-                "<title>VOICEVOX ENGINE - Swagger UI</title>",
-                    res.text):
-                self.__tts = VoiceVoxTTS(host="http://localhost:50021")
-            else:
+            try:
+                res = requests.get("http://localhost:50021/docs")
+                if res.status_code == 200 and regex.search(
+                    "<title>VOICEVOX ENGINE - Swagger UI</title>",
+                        res.text):
+                    self.__tts = VoiceVoxTTS(host="http://localhost:50021")
+                else:
+                    self.__tts = GoogleTTS()
+            except requests.exceptions.ConnectionError:
                 self.__tts = GoogleTTS()
 
     def _build_audio(self, elem):
@@ -43,9 +46,9 @@ class Audio:
         assert len(elem) == 0, "no child is needed."
 
         if "duration" in elem.attrib:
-            duration = elem.attrib["duration"]
+            duration = parse_time(elem.attrib["duration"])
         else:
-            duration = 0
+            duration = 0.0
 
         return pydub.AudioSegment.silent(duration*1000)
 

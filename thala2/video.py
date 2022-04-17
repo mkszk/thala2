@@ -58,7 +58,7 @@ class Video:
             assert False, "src file is needed."
 
         if "duration" in elem.attrib:
-            duration = elem.attrib["duration"]
+            duration = parse_time(elem.attrib["duration"])
         else:
             duration = 0
 
@@ -301,9 +301,11 @@ class Video:
             return video.image(t)[:, :, 2::-1]
 
         clip = VideoClip(make_frame, duration=duration)
+        # WORK_AROUND: MoviePy seem to have bugs to calculate the duration of monoral audio
+        audio = audio.set_channels(2)
         array = np.frombuffer(audio.raw_data,
                               dtype=np.int16).reshape(-1,
                                                       audio.channels) / 65535.
-        clip.audio = AudioArrayClip(array, fps=44100)
+        clip.audio = AudioArrayClip(array, fps=audio.frame_rate)
 
         return clip
