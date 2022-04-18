@@ -69,8 +69,10 @@ class Video:
         for child in elem:
             if child.tag == "sub":
                 assert "alias" in child.attrib
-                text += child.text
-                text += child.tail
+                if child.text:
+                    text += child.text
+                if child.tail:
+                    text += child.tail
             else:
                 assert False, "child with sub-tag is needed."
 
@@ -117,9 +119,9 @@ class Video:
                 0,
                 0,
                 0.,
-                width - w0,
-                height - h0,
-                duration - d0)
+                max(width - w0, 0),
+                max(height - h0, 0),
+                max(duration - d0, 0))
 
         return (video, self.__audio._build_any(elem))
 
@@ -225,7 +227,7 @@ class Video:
             if "height" in elem.attrib:
                 height = int(elem.attrib["height"])
             else:
-                height = w0
+                height = h0
             fxy = min(width / w0, height / h0)
             assert 0 < fxy, "0 <= fxy is needed."
         if "ft" in elem.attrib:
