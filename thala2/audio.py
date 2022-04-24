@@ -50,15 +50,17 @@ class Audio:
         else:
             duration = 0.0
 
-        return pydub.AudioSegment.silent(duration*1000)
+        return pydub.AudioSegment.silent(duration * 1000)
 
     def _build_speak(self, elem):
         text = elem.text or ""
         for child in elem:
             if child.tag == "sub":
                 assert "alias" in child.attrib
-                text += child.attrib["alias"]
-                text += child.tail
+                if "alias" in child.attrib:
+                    text += child.attrib["alias"]
+                if child.tail:
+                    text += child.tail
             else:
                 assert False, "child with sub-tag is needed."
 

@@ -303,7 +303,8 @@ class Video:
             return video.image(t)[:, :, 2::-1]
 
         clip = VideoClip(make_frame, duration=duration)
-        # WORK_AROUND: MoviePy seem to have bugs to calculate the duration of monoral audio
+        # WORK_AROUND: MoviePy seem to have bugs to calculate the duration of
+        # monoral audio
         audio = audio.set_channels(2)
         array = np.frombuffer(audio.raw_data,
                               dtype=np.int16).reshape(-1,
